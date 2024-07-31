@@ -1,6 +1,6 @@
 import logging
 from utils import config, helpers
-from integrations import browser, computer, discord, facebook, google, lam_at_home, open_interpreter, telegram
+from integrations import browser, computer, discord, facebook, google, lam_at_home, open_interpreter, telegram, homeassistant
 
 def execute_task(context, text):
     words = text.split()
@@ -145,6 +145,13 @@ def execute_task(context, text):
                 helpers.log_disabled_integration("TelegramText")
         else:
             helpers.log_disabled_integration("Telegram")
+
+    elif integration == "homeassistant":
+        if config.config["homeassistant_isenabled"]:
+            page = context.new_page()  # Open a new page
+            homeassistant.homeassistant(page, message)
+        else:
+            helpers.log_disabled_integration("homeassistant")
 
     else:
         logging.error("Unknown command type.")
