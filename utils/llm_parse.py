@@ -74,6 +74,10 @@ def LLMParse(user_prompt, transcript=None, temperature=0.1, top_p=1):
             Google Home: Google Home [Automation name]
             Example: Google home Desk lamp off [Turns desk lamp off] (Use the list titled `googlehomeautomations` to determine the right one to select. If there's not one that fits what the user means, print x.) googlehomeautomations: {googlehome_automations}
 
+            ### HomeAssistant Commands:
+            HomeAssistant: HomeAssistant [Automation name]
+            Example: HomeAssistant Bedroom Light On
+
             ### Other commands:
             Notes: Words to map (when a user says [one thing], assume they mean [other thing]). You have some creative control here. Use your best judgement:
             [Lam at Home]=[lamathome], [Lamb at Home]=[lamathome]
