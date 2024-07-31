@@ -12,7 +12,9 @@ def create_env_file():
             "FB_EMAIL": fb_email_entry.get(),
             "FB_PASS": fb_pass_entry.get(),
             "G_HOME_EMAIL": gh_email_entry.get(),
-            "G_HOME_PASS": gh_pass_entry.get()
+            "G_HOME_PASS": gh_pass_entry.get(),
+            "HA_URL": ha_url_entry.get(),
+            "HA_TOKEN": ha_token_entry.get()
         }
 
         with open(".env", "w") as env_file:
@@ -25,7 +27,7 @@ def create_env_file():
 
 def create_ui():
     """Creates and runs the UI for credential input."""
-    global root, rh_access_token_entry, fb_email_entry, fb_pass_entry, dc_email_entry, dc_pass_entry, groq_api_key_entry
+    global root, rh_access_token_entry, fb_email_entry, fb_pass_entry, dc_email_entry, dc_pass_entry, groq_api_key_entry, ha_url_entry, ha_token_entry
     root = tk.Tk()
     root.title("Enter Credentials")
     root.configure(bg='#1a1a1a')
@@ -53,7 +55,9 @@ def create_ui():
         ("Facebook Email:", "fb_email_entry", False),
         ("Facebook Password:", "fb_pass_entry", True),
         ("Google Home Email:", "gh_email_entry", False),
-        ("Google Home Password:", "gh_pass_entry", True)
+        ("Google Home Password:", "gh_pass_entry", True),
+        ("Home Assistant URL:", "ha_url_entry", False),
+        ("Home Assistant Token:", "ha_token_entry", True)
     ]
 
     # Create and place the labels and entries dynamically
