@@ -148,10 +148,10 @@ def execute_task(context, text):
 
     elif integration == "homeassistant":
         if config.config["homeassistant_isenabled"]:
-            result = homeassistant.homeassistant(message)
-            logging.info(f"Home Assistant result: {result}")
+            result = homeassistant(text)
+            logging.info(result)
         else:
-            helpers.log_disabled_integration("homeassistant")
+            helpers.log_disabled_integration("HomeAssistant")
 
     else:
         logging.error("Unknown command type.")
