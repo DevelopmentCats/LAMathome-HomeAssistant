@@ -1,73 +1,50 @@
-import time
+import requests
 import logging
-from utils.get_env import HA_URL, HA_USER, HA_PASS
+from utils.get_env import HA_URL, HA_TOKEN
 
-def homeassistant(page, automation):
-    timeoutamt = 30000
-
-    """Opens Home Assistant, logs in if necessary, and runs the automation."""
-    session_file = "cache/state.json"
-    context = page.context
-
-    page.goto(HA_URL)
-    logging.info(f"Opening Home Assistant page: {page.url}")
-    logging.info(f"Automation to run: {automation}")
-
-    # Check if not logged in
-    first_login = False
-    if page.url == f"{HA_URL}/auth/authorize" or page.is_visible("text=Log in"):
-        first_login = True
-        logging.info("Not logged in, proceeding with login steps")
-        page.wait_for_load_state('load')
-        
-        page.fill("input[name='username']", HA_USER)
-        logging.info(f"Filled in user: {HA_USER}")
-
-        page.fill("input[name='password']", HA_PASS)
-        logging.info("Filled in password")
-
-        page.click("button[type='submit']")
-        logging.info("Clicked 'Submit' after filling credentials")
-
-    if first_login:
-        try:
-            time.sleep(2)
-            if page.is_visible("text=Save your login"):
-                page.click("text=Save your login")
-                logging.info("Clicked 'Save your login' button")
-        except Exception as e:
-            logging.info("No 'Save your login' button found or unable to click it")
-
-    page.wait_for_load_state('load')
-
-    logging.info("Waiting for the automation section to load")
-
-    try:
-        page.goto(f"{HA_URL}/config/automation/dashboard")
-        page.wait_for_selector(f"//div[contains(@class, 'entity') and normalize-space(text())='{automation}']", timeout=timeoutamt)
-        logging.info(f'Home Assistant "{automation}" section is visible')
-    except Exception as e:
-        logging.error(f'Home Assistant "{automation}" section is not available within the timeout period')
-        context.storage_state(path=session_file)
-        logging.info(f"Saved browser state to {session_file}")
-        page.close()
-        logging.info("Browser closed")
+def homeassistant(automation):
+    """Runs the specified automation in Home Assistant using the API."""
+    
+    headers = {
+        "Authorization": f"Bearer {HA_TOKEN}",
+        "Content-Type": "application/json"
+    }
+    
+    # Get the list of automations
+    url = f"{HA_URL}/api/services/automation/trigger"
+    
+    # Find the automation entity ID
+    response = requests.get(f"{HA_URL}/api/states", headers=headers)
+    
+    if response.status_code != 200:
+        logging.error(f"Failed to retrieve states: {response.status_code}")
         return
-
-    # Locate the automation div and click the execute button
-    automation_div = page.locator(f"//div[contains(@class, 'entity') and normalize-space(text())='{automation}']").first
-    if automation_div.is_visible():
-        logging.info(f'Home Assistant "{automation}" was found')
-        execute_button = automation_div.locator("xpath=ancestor::ha-card//mwc-button[@aria-label='Execute']").first
-        if execute_button.is_visible():
-            execute_button.click()
-            logging.info(f'Home Assistant "{automation}" execute button was clicked')
-        else:
-            logging.error(f'Execute button for "{automation}" is not visible')
+    
+    states = response.json()
+    
+    automation_entity_id = None
+    for state in states:
+        if state['entity_id'].startswith('automation.') and state['attributes'].get('friendly_name') == automation:
+            automation_entity_id = state['entity_id']
+            break
+    
+    if not automation_entity_id:
+        logging.error(f"Automation '{automation}' not found")
+        return
+    
+    logging.info(f"Found automation '{automation}' with entity ID: {automation_entity_id}")
+    
+    # Trigger the automation
+    payload = {
+        "entity_id": automation_entity_id
+    }
+    
+    response = requests.post(url, json=payload, headers=headers)
+    
+    if response.status_code == 200:
+        logging.info(f"Successfully triggered automation '{automation}'")
     else:
-        logging.error(f'Home Assistant "{automation}" is not available')
+        logging.error(f"Failed to trigger automation '{automation}': {response.status_code}")
 
-    context.storage_state(path=session_file)
-    logging.info(f"Saved browser state to {session_file}")
-    page.close()
-    logging.info("Browser closed")
+# Example usage
+homeassistant("Your Automation Name")
