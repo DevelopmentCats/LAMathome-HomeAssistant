@@ -59,5 +59,9 @@
 		"openinterpreter_llm_temperature": 0.1,
 
 	"telegram_isenabled": true,
-		"telegramtext_isenabled": true
+		"telegramtext_isenabled": true,
+
+	"homeassistant_isenabled": true,
+	"homeassistant_url": "http://your_homeassistant_url:8123",
+	"homeassistant_token": "your_long_lived_access_token"
 }
