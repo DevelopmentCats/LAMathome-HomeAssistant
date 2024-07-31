@@ -148,8 +148,7 @@ def execute_task(context, text):
 
     elif integration == "homeassistant":
         if config.config["homeassistant_isenabled"]:
-            page = context.new_page()  # Open a new page
-            homeassistant.homeassistant(page, message)
+            homeassistant.homeassistant(message)
         else:
             helpers.log_disabled_integration("homeassistant")
 
