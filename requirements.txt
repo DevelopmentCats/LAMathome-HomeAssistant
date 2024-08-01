@@ -5,3 +5,4 @@ tk
 requests
 groq
 open-interpreter
+webcolors
