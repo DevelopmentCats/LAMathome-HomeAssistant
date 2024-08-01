@@ -66,7 +66,7 @@ Below is a list of our current integrations. This list is kept up-to-date.
 |⚠️|[Discord](https://discord.com)|Messaging|Sends a message on Discord to a specified person/channel.|`Text poke on discord asking when he's going to be back online. Wait, no ask him on telegram. Actually no, discord is good.`|
 |⚠️|[FB Messenger](https://messenger.com)|Messaging|Sends a message on FB Messenger to a specified person.|`Ask Justin what he thinks of my new sunglasses. Oh, send that on facebook.`|
 |⚠️|[Telegram](https://web.telegram.org/)|Messaging|Sends a message on Telegram to a specified person.|`Message Kevin on telegram asking him when he's gonna PR his new feature`|
-||[Home Assistant](https://www.home-assistant.io/)|Smart Home|Controls Home Assistant entities.|`Turn on the living room lights`, `Set the thermostat to 72 degrees`|
+||[Home Assistant](https://www.home-assistant.io/)|Smart Home|Controls Home Assistant entities.|`Save Notes Home Assistant Turn Bedroom On`, `Save Note Home Assistant Set the thermostat to 72 degrees`|
 
 > [!NOTE]
 >
