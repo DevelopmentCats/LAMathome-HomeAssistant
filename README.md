@@ -197,12 +197,15 @@ To allow LAMatHome to use your Google Home, you need to follow these steps:
 ### Home Assistant integration:
 To use the Home Assistant integration with LAMatHome, follow these steps:
 1. In your `config.json` file, ensure that `homeassistant_isenabled` is set to `true`.
-2. Set the `homeassistant_url` to your Home Assistant instance URL (e.g., "http://your_homeassistant_url:8123").
-3. Generate a long-lived access token in your Home Assistant instance and set it as `homeassistant_token` in the `config.json` file.
-4. Once configured, you can control your Home Assistant entities through LAMatHome. For example:
+2. When running LAMatHome for the first time (or when prompted), you'll be asked to enter various credentials in the Variables Prompt. For Home Assistant:
+   - Enter your Home Assistant instance URL (e.g., "http(s)://your_homeassistant_url") when prompted for `HA_URL`.
+   - Enter a long-lived access token from your Home Assistant instance when prompted for `HA_TOKEN`.
+3. Once configured, you can control your Home Assistant entities through LAMatHome. For example:
    - "Turn on the living room lights"
    - "Set the thermostat to 72 degrees"
    - "Is the front door locked?"
+
+The integration will attempt to find the best match for your requested entity and perform the appropriate action.
 
 The integration will attempt to find the best match for your requested entity and perform the appropriate action.
 
