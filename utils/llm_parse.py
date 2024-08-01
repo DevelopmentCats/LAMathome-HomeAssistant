@@ -3,7 +3,7 @@ import re
 import logging
 from groq import Groq
 from utils import config, get_env
-
+from integrations.homeassistant import get_entities
 
 def get_api_configuration():
     GROQ_API_KEY = get_env.GROQ_API_KEY
@@ -12,7 +12,6 @@ def get_api_configuration():
     else:
         raise ValueError("No valid API key found. Please set GROQ_API_KEY in your environment variables.")
 
-
 def LLMParse(user_prompt, transcript=None, temperature=0.1, top_p=1):
     api_key = get_api_configuration()
 
@@ -20,6 +19,10 @@ def LLMParse(user_prompt, transcript=None, temperature=0.1, top_p=1):
 
     # Variables for the prompt:
     googlehome_automations = config.config.get("googlehomeautomations", [])
+    
+    # Fetch Home Assistant entities and states
+    ha_entities = get_entities()
+    ha_info = "\n".join([f"{name}: {data['state']} (ID: {data['entity_id']})" for name, data in ha_entities.items()])
 
     messages = [
         {
@@ -79,7 +82,10 @@ def LLMParse(user_prompt, transcript=None, temperature=0.1, top_p=1):
             Example: HomeAssistant Bedroom Light On
             Example: HomeAssistant Kitchen Fan Off
             Example: HomeAssistant Living Room Temperature 22
-            Note: For HomeAssistant commands, always use the format "HomeAssistant [Entity] [Action]". The entity should be the full name of the device or sensor, and the action should be "On", "Off", or a specific value for adjustable entities.
+            Note: For HomeAssistant commands, always use the format "HomeAssistant [Entity] [Action]". The entity should be the full name of the device or sensor, and the action should be "On", "Off", "Toggle", or a specific value for adjustable entities.
+
+            Available Home Assistant entities and their current states:
+            {ha_info}
 
             ### Other commands:
             Notes: Words to map (when a user says [one thing], assume they mean [other thing]). You have some creative control here. Use your best judgement:
