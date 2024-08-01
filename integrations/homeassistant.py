@@ -20,7 +20,7 @@ def determine_action(user_input):
     else:
         return "set"
 
-def homeassistant(user_input):
+def control_homeassistant(user_input):
     """Controls Home Assistant entities based on user input."""
     
     headers = {
@@ -82,3 +82,9 @@ def homeassistant(user_input):
             return f"Failed to control {best_match}: {e}"
     else:
         return f"Couldn't find a close match for '{entity_name}'. Available entities: {', '.join(entities.keys())}"
+
+if __name__ == "__main__":
+    # This allows you to test the function directly
+    import sys
+    if len(sys.argv) > 1:
+        print(control_homeassistant(" ".join(sys.argv[1:])))
