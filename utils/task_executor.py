@@ -148,8 +148,9 @@ def execute_task(context, text):
 
     elif integration == "homeassistant":
         if config.config["homeassistant_isenabled"]:
-            result = homeassistant(text)
+            result = homeassistant.control_homeassistant(text)
             logging.info(result)
+            return result  # Return the result
         else:
             helpers.log_disabled_integration("HomeAssistant")
 
