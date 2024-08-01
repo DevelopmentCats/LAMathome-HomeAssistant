@@ -66,6 +66,7 @@ Below is a list of our current integrations. This list is kept up-to-date.
 |⚠️|[Discord](https://discord.com)|Messaging|Sends a message on Discord to a specified person/channel.|`Text poke on discord asking when he's going to be back online. Wait, no ask him on telegram. Actually no, discord is good.`|
 |⚠️|[FB Messenger](https://messenger.com)|Messaging|Sends a message on FB Messenger to a specified person.|`Ask Justin what he thinks of my new sunglasses. Oh, send that on facebook.`|
 |⚠️|[Telegram](https://web.telegram.org/)|Messaging|Sends a message on Telegram to a specified person.|`Message Kevin on telegram asking him when he's gonna PR his new feature`|
+||[Home Assistant](https://www.home-assistant.io/)|Smart Home|Controls Home Assistant entities.|`Turn on the living room lights`, `Set the thermostat to 72 degrees`|
 
 > [!NOTE]
 >
@@ -192,6 +193,18 @@ To allow LAMatHome to use your Google Home, you need to follow these steps:
 3. Add the verbatim Automation names to config.json, on the `googlehomeautomations` line. There are some examples there, just follow the pattern to add more.
    - `"googlehomeautomations": ["Automation 1", "Automation 2", "Automation 3"],`
 4. You should be set! This list that you just configured will be passed to `/utils/llm_parse.py` and if determined to be run, will run! Ask r1/LAMatHome to "Turn on the lamp in my room" or "Turn off my tv".
+
+### Home Assistant integration:
+To use the Home Assistant integration with LAMatHome, follow these steps:
+1. In your `config.json` file, ensure that `homeassistant_isenabled` is set to `true`.
+2. Set the `homeassistant_url` to your Home Assistant instance URL (e.g., "http://your_homeassistant_url:8123").
+3. Generate a long-lived access token in your Home Assistant instance and set it as `homeassistant_token` in the `config.json` file.
+4. Once configured, you can control your Home Assistant entities through LAMatHome. For example:
+   - "Turn on the living room lights"
+   - "Set the thermostat to 72 degrees"
+   - "Is the front door locked?"
+
+The integration will attempt to find the best match for your requested entity and perform the appropriate action.
 
 ## Other information:
 ### Errors you may run into:
