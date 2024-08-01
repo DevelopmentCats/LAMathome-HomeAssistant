@@ -2,7 +2,7 @@ import requests
 import logging
 from difflib import get_close_matches
 from utils.get_env import HA_TOKEN, HA_URL
-from webcolors import name_to_rgb, CSS3_NAMES_TO_HEX
+from webcolors import name_to_rgb
 
 def get_entities():
     """Fetch the list of entities and their states from Home Assistant API."""
