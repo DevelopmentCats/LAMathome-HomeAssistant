@@ -82,7 +82,19 @@ def LLMParse(user_prompt, transcript=None, temperature=0.1, top_p=1):
             Example: HomeAssistant Bedroom Light On
             Example: HomeAssistant Kitchen Fan Off
             Example: HomeAssistant Living Room Temperature 22
-            Note: For HomeAssistant commands, always use the format "HomeAssistant [Entity] [Action]". The entity should be the full name of the device or sensor, and the action should be "On", "Off", "Toggle", or a specific value for adjustable entities.
+            Example: HomeAssistant Bedroom Light rgb(255,0,0)
+            Example: HomeAssistant Living Room Light 50% (sets brightness to 50%)
+            Note: For HomeAssistant commands, always use the format "HomeAssistant [Entity] [Action]". The entity should be the full name of the device or sensor, and the action should be "On", "Off", "Toggle", a specific value for adjustable entities, an RGB color value for color-capable lights, or a percentage for brightness control.
+
+            Color Control: When a user specifies a color for a light, convert it to the closest RGB value. Use your knowledge of colors to make this conversion. Always output the color in rgb(r,g,b) format.
+            Example: "Set the bedroom light to bright red" → HomeAssistant Bedroom Light rgb(255,0,0)
+            Example: "Change the living room light to sky blue" → HomeAssistant Living Room Light rgb(135,206,235)
+            Example: "Make the kitchen light forest green" → HomeAssistant Kitchen Light rgb(34,139,34)
+
+            Brightness Control: When a user specifies brightness for a light, convert it to a percentage. Always output the brightness as a percentage with the % symbol.
+            Example: "Set the bedroom light to half brightness" → HomeAssistant Bedroom Light 50%
+            Example: "Dim the living room light to 20 percent" → HomeAssistant Living Room Light 20%
+            Example: "Make the kitchen light as bright as possible" → HomeAssistant Kitchen Light 100%
 
             Available Home Assistant entities and their current states:
             {ha_info}
