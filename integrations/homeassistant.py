@@ -2,6 +2,7 @@ import requests
 import logging
 from difflib import get_close_matches
 from utils.get_env import HA_TOKEN, HA_URL
+from webcolors import name_to_rgb, CSS3_NAMES_TO_HEX
 
 def get_entities():
     """Fetch the list of entities and their states from Home Assistant API."""
@@ -58,27 +59,57 @@ def control_homeassistant(user_input):
         # Determine the action based on the current state and user input
         if action in ["on", "off"]:
             service = "turn_on" if action == "on" else "turn_off"
+            payload = {"entity_id": entity_id}
         elif action == "toggle":
             service = "toggle"
+            payload = {"entity_id": entity_id}
+        elif action.startswith("rgb("):
+            # Handle RGB color change
+            try:
+                rgb_values = [int(val) for val in action[4:-1].split(',')]
+                if len(rgb_values) != 3 or not all(0 <= val <= 255 for val in rgb_values):
+                    return "Invalid RGB values. Please use format: rgb(r,g,b) with values between 0 and 255."
+                service = "turn_on"
+                payload = {
+                    "entity_id": entity_id,
+                    "rgb_color": rgb_values
+                }
+            except (ValueError, IndexError):
+                return "Invalid RGB format. Please use: rgb(r,g,b)"
         else:
             try:
-                value = float(action)
-                service = "set_value"
+                # Check if the action is a percentage (for brightness)
+                if action.endswith('%'):
+                    value = float(action[:-1])
+                    if 0 <= value <= 100:
+                        service = "turn_on"
+                        payload = {"entity_id": entity_id, "brightness_pct": value}
+                    else:
+                        return "Invalid brightness percentage. Please use a value between 0 and 100."
+                else:
+                    # Try to convert color name to RGB
+                    rgb = name_to_rgb(action)
+                    service = "turn_on"
+                    payload = {
+                        "entity_id": entity_id,
+                        "rgb_color": [rgb.red, rgb.green, rgb.blue]
+                    }
             except ValueError:
-                return f"Invalid action: {action}. Use 'on', 'off', 'toggle', or a numeric value."
+                return f"Invalid action: {action}. Use 'on', 'off', 'toggle', 'rgb(r,g,b)', a valid color name, or a percentage (e.g., '50%') for brightness."
         
         # Call the service
         domain = entity_id.split('.')[0]
         url = f"{HA_URL}/api/services/{domain}/{service}"
-        payload = {"entity_id": entity_id}
-        
-        if service == "set_value":
-            payload["value"] = value
         
         try:
             response = requests.post(url, json=payload, headers=headers)
             response.raise_for_status()
-            return f"Successfully {service.replace('_', ' ')} {best_match[0]}"
+            if 'rgb_color' in payload:
+                return f"Successfully set {best_match[0]} color to RGB{tuple(payload['rgb_color'])}"
+            elif 'brightness_pct' in payload:
+                return f"Successfully set {best_match[0]} brightness to {payload['brightness_pct']}%"
+            else:
+                return f"Successfully {service.replace('_', ' ')} {best_match[0]}"
         except requests.exceptions.RequestException as e:
             logging.error(f"Failed to control {best_match[0]}: {e}")
             return f"Failed to control {best_match[0]}: {e}"
