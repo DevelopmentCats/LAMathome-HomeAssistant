@@ -201,9 +201,9 @@ To use the Home Assistant integration with LAMatHome, follow these steps:
    - Enter your Home Assistant instance URL (e.g., "http(s)://your_homeassistant_url") when prompted for `HA_URL`.
    - Enter a long-lived access token from your Home Assistant instance when prompted for `HA_TOKEN`.
 3. Once configured, you can control your Home Assistant entities through LAMatHome. For example:
-   - "Turn on the living room lights"
-   - "Set the thermostat to 72 degrees"
-   - "Is the front door locked?"
+   - "Save Note Home Assistant Turn on the living room lights"
+   - "Save Note Home Assistant Set the thermostat to 72 degrees"
+   - "Save Note Home Assistant Toggle Bedroom off"
 
 The integration will attempt to find the best match for your requested entity and perform the appropriate action.
 
