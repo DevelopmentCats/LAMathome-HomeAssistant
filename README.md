@@ -66,7 +66,7 @@ Below is a list of our current integrations. This list is kept up-to-date.
 |⚠️|[Discord](https://discord.com)|Messaging|Sends a message on Discord to a specified person/channel.|`Text poke on discord asking when he's going to be back online. Wait, no ask him on telegram. Actually no, discord is good.`|
 |⚠️|[FB Messenger](https://messenger.com)|Messaging|Sends a message on FB Messenger to a specified person.|`Ask Justin what he thinks of my new sunglasses. Oh, send that on facebook.`|
 |⚠️|[Telegram](https://web.telegram.org/)|Messaging|Sends a message on Telegram to a specified person.|`Message Kevin on telegram asking him when he's gonna PR his new feature`|
-||[Home Assistant](https://www.home-assistant.io/)|Smart Home|Controls Home Assistant entities.|`Save Note Home Assistant Turn Bedroom On`, `Save Note Home Assistant Set the thermostat to 72 degrees`|
+||[Home Assistant](https://www.home-assistant.io/)|Smart Home|Controls Home Assistant entities.|`Home Assistant Turn Bedroom On`, `Home Assistant Set the thermostat to 72 degrees`|
 
 > [!NOTE]
 >
@@ -200,21 +200,32 @@ To use the Home Assistant integration with LAMatHome, follow these steps:
 2. When running LAMatHome for the first time (or when prompted), you'll be asked to enter various credentials in the Variables Prompt. For Home Assistant:
    - Enter your Home Assistant instance URL (e.g., "http(s)://your_homeassistant_url") when prompted for `HA_URL`.
    - Enter a long-lived access token from your Home Assistant instance when prompted for `HA_TOKEN`.
-3. Once configured, you can control your Home Assistant entities through LAMatHome. For example:
-   - "Save Note Home Assistant Turn on the living room lights"
-   - "Save Note Home Assistant Set the thermostat to 72 degrees"
-   - "Save Note Home Assistant Toggle Bedroom off"
+3. Once configured, you can control your Home Assistant entities through LAMatHome. Examples include:
 
-The integration will attempt to find the best match for your requested entity and perform the appropriate action.
+   - Turning devices on/off:
+     "Home Assistant Turn on the living room lights"
 
-The integration will attempt to find the best match for your requested entity and perform the appropriate action.
+   - Setting specific values:
+     "Home Assistant Set the thermostat to 72 degrees"
+
+   - Changing light colors (using RGB values or color names):
+     "Home Assistant Set the bedroom light to rgb(255,0,0)"
+     "Home Assistant Change the kitchen light to sky blue"
+
+   - Adjusting brightness:
+     "Home Assistant Set the dining room light to 50%"
+     "Home Assistant Dim the hallway light to half brightness"
+
+The integration will attempt to find the best match for your requested entity and perform the appropriate action. It can handle on/off commands, specific values, color changes (using RGB or color names), and brightness adjustments.
+
+Note: The system will automatically convert color names to RGB values and interpret brightness commands as percentages.
 
 ## Other information:
 ### Errors you may run into:
 |Error|Meaning/Fix|
 |-|-|
 |`500 Server Error: Internal Server Error for url: https://hole.rabbit.tech/APIs/fetchUserJournal`|This means that for some reason, the request to the rabbit API failed. More often than not, this means that your token has expired. While this *can* happen if your token is valid, it is very rare. [Instructions to obtain user token](https://github.com/dot-Justin/LAMatHome#quick-start-guide)|
-|`playwright._impl._errors.TimeoutError: Page.click: Timeout 30000ms exceeded.`|This means that, in waiting for a certain object on the website to load, it never loaded, and Playwright timed out. If this ever happens, please open a [bug issue](https://github.com/dot-Justin/LAMatHome/issues/new?assignees=&labels=bug&projects=&template=bug_report.md).|
+|`playwright._impl._errors.TimeoutError: Page.click: Timeout 30000ms exceeded.`|This means that, in waiting for a certain object on the website to load, it never loaded, and Playwright timed out. If this ever happens, please open a [bug issue](https://github.com/dot-justin/LAMatHome/issues/new?assignees=&labels=bug&projects=&template=bug_report.md).|
 
 ### Prompts:
 |Use case|Prompt|
