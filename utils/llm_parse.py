@@ -67,30 +67,8 @@ def LLMParse(user_prompt, transcript=None, temperature=0.1, top_p=1):
             Telegram: Telegram [Name] [Message]
             Example: Telegram Arthur What's up?
 
-            Discord: Discord [Server/User] [Action] [Channel (if Server)] [Content]
-            Server/User: The name of the Discord server or the username (e.g., "MyServer" or "@JohnDoe")
-            Actions: send, react, edit, delete
-            Examples:
-            - Discord MyServer send #general Hello everyone!
-            - Discord @JohnDoe send How are you?
-            - Discord GameServer react #announcements 👍
-            - Discord @Alice react 👍 [MessageID]
-            - Discord StudyGroup edit #general [MessageID] Updated content
-            - Discord @Bob edit [MessageID] Updated message
-            - Discord FamilyServer delete #random [MessageID]
-            - Discord @Charlie delete [MessageID]
-
-            Discord-specific notes:
-            - Server name should be provided without quotes or special characters
-            - For users, use @ prefix (e.g., @JohnDoe)
-            - For channels (only when sending to a server), use # prefix (e.g., #general)
-            - Channel is only required when sending a message to a server, not when messaging a user
-            - For reactions, use Unicode emojis or Discord custom emoji names
-            - For edit and delete actions, include the MessageID if available
-            - If the server/user is not specified, respond with x
-            - If the action is not recognized, respond with x
-            - If the content is missing for send and edit actions, respond with x
-            - If the server name is unknown, use "DefaultServer"
+            Discord: Discord [Name] [Message]
+            Example: Discord John Hello!
 
             Facebook: Facebook [Name] [Message]
             Example: Facebook Jane How are you?
@@ -109,13 +87,11 @@ def LLMParse(user_prompt, transcript=None, temperature=0.1, top_p=1):
             - HomeAssistant Bedroom Light 50% (sets brightness to 50%)
             - HomeAssistant Movie Night Scene activate
             - HomeAssistant Good Morning Automation trigger
-            - HomeAssistant Living Room Temperature get (retrieves current state)
 
             Entity Control:
             - Use the full name of the device or sensor as it appears in Home Assistant.
             - Actions can be "On", "Off", "Toggle", or a specific value for adjustable entities.
             - For lights, use "rgb(r,g,b)" for color control or a percentage for brightness.
-            - Use "get" to retrieve the current state of an entity.
 
             Scene Control:
             - Use "Scene [Scene Name] activate" to activate a scene.
@@ -143,16 +119,6 @@ def LLMParse(user_prompt, transcript=None, temperature=0.1, top_p=1):
             - For temperature adjustments, use the appropriate unit (Celsius or Fahrenheit) based on the user's locale or preference.
             Example:
             - "Set the living room temperature to 72 degrees" → HomeAssistant Living Room Temperature 22 (assuming Celsius)
-
-            State Retrieval:
-            - To get the current state of an entity, use the "get" action.
-            Example:
-            - "What's the current temperature in the bedroom?" → HomeAssistant Bedroom Temperature get
-
-            Multiple Commands:
-            - If multiple Home Assistant commands are needed, separate them with &&.
-            Example:
-            - "Turn on the living room lights and set the temperature to 72 degrees" → HomeAssistant Living Room Light On&&HomeAssistant Living Room Temperature 22
 
             Available Home Assistant entities and their current states:
             {ha_info}
@@ -218,21 +184,6 @@ def LLMParse(user_prompt, transcript=None, temperature=0.1, top_p=1):
             Send a Facebook text to Jane asking if she's okay. → Facebook Jane Are you okay?
             Text Jane on Facebook to see if she's available. Also send another text to Jake, asking when he'll be in town. → Facebook Jane Are you available?. (Two prompts, pick the most important one to send)
             What's the nearest star to Earth? Also, text Justin on telegram asking what's for dinner. → Respond with Telegram Justin What's for dinner? (Two prompts, pick the most important one to send. in this case, only one was a command.)
-
-            Discord text John → Respond with x. (Missing Action and Content)
-            Send a message on Discord → Respond with x. (Missing Server/User and Content)
-            Discord MyServer react with a thumbs up → Respond with x. (Missing Channel for server message)
-            Discord WorkSpace send → Respond with x. (Missing Channel and Content for server message)
-            Discord @Alice send Hello! How are you? → Discord @Alice send Hello! How are you?
-            Discord GameServer send #announcements New game release! → Discord GameServer send #announcements New game release!
-            Discord StudyGroup react #general 🎉 → Discord StudyGroup react #general 🎉
-            Discord @Bob react 👍 [MessageID] → Discord @Bob react 👍 [MessageID]
-            Discord FamilyServer edit #general [MessageID] Updated announcement → Discord FamilyServer edit #general [MessageID] Updated announcement
-            Discord @Charlie edit [MessageID] Fixed typo → Discord @Charlie edit [MessageID] Fixed typo
-            Discord CodeClub delete #random [MessageID] → Discord CodeClub delete #random [MessageID]
-            Discord @David delete [MessageID] → Discord @David delete [MessageID]
-            Discord send Hello → Respond with x. (Missing Server/User)
-            Discord WorkSpace → Respond with x. (Missing Action and Content)
 
             ### Browser
             Search for emails from boss in my Gmail. Also, open another search for amazon, search for cool sunglasses. → Browser Gmail boss (Two prompts, pick the most important one to send)
