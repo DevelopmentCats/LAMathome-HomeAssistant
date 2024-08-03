@@ -78,52 +78,26 @@ def LLMParse(user_prompt, transcript=None, temperature=0.1, top_p=1):
             Example: Google home Desk lamp off [Turns desk lamp off] (Use the list titled `googlehomeautomations` to determine the right one to select. If there's not one that fits what the user means, print x.) googlehomeautomations: {googlehome_automations}
 
             ### HomeAssistant Commands:
-            HomeAssistant: HomeAssistant [Entity/Scene/Automation] [Action/State]
-            Examples:
-            - HomeAssistant Living Room Light On
-            - HomeAssistant Kitchen Fan Off
-            - HomeAssistant Bedroom Temperature 22
-            - HomeAssistant Living Room Light rgb(255,0,0)
-            - HomeAssistant Bedroom Light 50% (sets brightness to 50%)
-            - HomeAssistant Movie Night Scene activate
-            - HomeAssistant Good Morning Automation trigger
+            HomeAssistant: HomeAssistant [Entity] [Action]
+            Example: HomeAssistant Bedroom Light On
+            Example: HomeAssistant Kitchen Fan Off
+            Example: HomeAssistant Living Room Temperature 22
+            Example: HomeAssistant Bedroom Light rgb(255,0,0)
+            Example: HomeAssistant Living Room Light 50% (sets brightness to 50%)
+            Note: For HomeAssistant commands, always use the format "HomeAssistant [Entity] [Action]". The entity should be the full name of the device or sensor, and the action should be "On", "Off", "Toggle", a specific value for adjustable entities, an RGB color value for color-capable lights, or a percentage for brightness control.
 
-            Entity Control:
-            - Use the full name of the device or sensor as it appears in Home Assistant.
-            - Actions can be "On", "Off", "Toggle", or a specific value for adjustable entities.
-            - For lights, use "rgb(r,g,b)" for color control or a percentage for brightness.
+            Color Control: When a user specifies a color for a light, convert it to the closest RGB value. Use your knowledge of colors to make this conversion. Always output the color in rgb(r,g,b) format.
+            Example: "Set the bedroom light to bright red" → HomeAssistant Bedroom Light rgb(255,0,0)
+            Example: "Change the living room light to sky blue" → HomeAssistant Living Room Light rgb(135,206,235)
+            Example: "Make the kitchen light forest green" → HomeAssistant Kitchen Light rgb(34,139,34)
 
-            Scene Control:
-            - Use "Scene [Scene Name] activate" to activate a scene.
-
-            Automation Control:
-            - Use "Automation [Automation Name] trigger" to trigger an automation.
-
-            Color Control:
-            - When a user specifies a color for a light, convert it to the closest RGB value.
-            - Always output the color in rgb(r,g,b) format.
-            Examples:
-            - "Set the bedroom light to bright red" → HomeAssistant Bedroom Light rgb(255,0,0)
-            - "Change the living room light to sky blue" → HomeAssistant Living Room Light rgb(135,206,235)
-            - "Make the kitchen light forest green" → HomeAssistant Kitchen Light rgb(34,139,34)
-
-            Brightness Control:
-            - When a user specifies brightness for a light, convert it to a percentage.
-            - Always output the brightness as a percentage with the % symbol.
-            Examples:
-            - "Set the bedroom light to half brightness" → HomeAssistant Bedroom Light 50%
-            - "Dim the living room light to 20 percent" → HomeAssistant Living Room Light 20%
-            - "Make the kitchen light as bright as possible" → HomeAssistant Kitchen Light 100%
-
-            Temperature Control:
-            - For temperature adjustments, use the appropriate unit (Celsius or Fahrenheit) based on the user's locale or preference.
-            Example:
-            - "Set the living room temperature to 72 degrees" → HomeAssistant Living Room Temperature 22 (assuming Celsius)
+            Brightness Control: When a user specifies brightness for a light, convert it to a percentage. Always output the brightness as a percentage with the % symbol.
+            Example: "Set the bedroom light to half brightness" → HomeAssistant Bedroom Light 50%
+            Example: "Dim the living room light to 20 percent" → HomeAssistant Living Room Light 20%
+            Example: "Make the kitchen light as bright as possible" → HomeAssistant Kitchen Light 100%
 
             Available Home Assistant entities and their current states:
             {ha_info}
-
-            Note: Always use the exact entity names as they appear in the list above. If an entity is not found, respond with x.
 
             ### Other commands:
             Notes: Words to map (when a user says [one thing], assume they mean [other thing]). You have some creative control here. Use your best judgement:
