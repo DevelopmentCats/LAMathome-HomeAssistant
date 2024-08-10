@@ -109,6 +109,11 @@ def LLMParse(user_prompt, transcript=None, temperature=0.1, top_p=1):
             Prompt from User: Tell open interpreter to find the file on my desktop called file.txt, then send it to JohnDoe@gmail.com via gmail.
             Parsed command: Openinterpreter Find the file on my desktop called file.txt, then send it to JohnDoe@gmail.com via gmail.
 
+            ### Pause Command:
+            Pause: pause [number of seconds]
+            Example: pause 5 (Pauses execution for 5 seconds)
+            Note: Interpret any command that indicates waiting or pausing for a specific time as a pause command. Convert time units to seconds if necessary.
+
             # Instructions:
             Absolute Requirement for Messaging Commands: For messaging commands, ensure all three variables [Platform], [Name], and [Message] are present. If ANY piece is missing, respond with x.
             No Placeholders: Do not use placeholders (e.g., [Name], [Message]). If the recipient is ambiguous (e.g., "team", "my brother"), respond with x.
@@ -141,6 +146,7 @@ def LLMParse(user_prompt, transcript=None, temperature=0.1, top_p=1):
             For requests to open a specific site, if you are aware of the site's existence, open it.
             For multiple commands, choose the most important one and respond with the formatted command. Ignore the rest.
             Your output should be the command only, with no quotations. Our server may break if the existence of quotation marks is detected.
+            For any command that indicates waiting or pausing for a specific time, convert it to a pause command with the time in seconds.
 
             ## Additional Examples:
             ### Messaging
@@ -193,6 +199,13 @@ def LLMParse(user_prompt, transcript=None, temperature=0.1, top_p=1):
             Run Chrome on computer. → Computer run Chrome
             Tell open interpreter to email John@gmail.com Aking about how his dog is doing since the accident. → Openinterpreter Email john@gmail.com How is your dog is doing since the accident?
             Launch calculator on my computer. → Computer run calculator
+
+            ### Pause and Timing
+            Wait for 2 minutes before the next command. → pause 120
+            Hold on for 30 seconds. → pause 30
+            Pause for half a minute. → pause 30
+            Wait 5 seconds between each command. → pause 5
+            Give it a moment (assume 1 second if no specific time is mentioned). → pause 1
             """
         },
         {
