@@ -1,4 +1,5 @@
 import logging
+import time
 from utils import config, helpers
 from integrations import browser, computer, discord, facebook, google, lam_at_home, open_interpreter, telegram, homeassistant
 
@@ -12,6 +13,16 @@ def execute_task(context, text):
     recipient = words[1].strip('.,!?:;"').lower()
     message = ' '.join(words[2:]).strip()
     
+    if integration == "pause":
+        try:
+            pause_time = float(recipient)
+            logging.info(f"Pausing for {pause_time} seconds")
+            time.sleep(pause_time)
+            return
+        except ValueError:
+            logging.error(f"Invalid pause time: {recipient}. Must be a number.")
+            return
+
     if integration == "browser":
         if not config.config["browser_isenabled"]:
             helpers.log_disabled_integration("Browser")
